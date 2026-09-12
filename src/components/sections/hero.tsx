@@ -1,7 +1,7 @@
 import { AvailabilityBadge } from "@/components/global/availability-badge";
 import { Button } from "@/components/ui/button";
 import { RevealLines } from "@/components/motion/split-reveal";
-import { ExplodedAssemblyStatic } from "./exploded-assembly-static";
+import { HeroAssembly } from "./hero-assembly";
 import { siteConfig, whatsappHref } from "@/content/site-config";
 
 export function Hero() {
@@ -52,7 +52,7 @@ export function Hero() {
       </div>
 
       <div className="hidden shrink-0 items-center justify-center lg:flex lg:w-[46%]">
-        <ExplodedAssemblyStatic />
+        <HeroAssembly />
       </div>
 
       <div className="absolute bottom-8 left-5 hidden items-center gap-3.5 md:left-20 lg:flex">

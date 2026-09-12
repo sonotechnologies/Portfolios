@@ -4,6 +4,7 @@ import { GridOverlay } from "@/components/global/grid-overlay";
 import { GrainOverlay } from "@/components/global/grain-overlay";
 import { LenisProvider } from "@/components/global/lenis-provider";
 import { CustomCursor } from "@/components/global/custom-cursor";
+import { RouteTransitionSignal } from "@/components/global/route-transition-signal";
 import { siteConfig } from "@/content/site-config";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GridOverlay />
         <GrainOverlay />
         <CustomCursor />
+        <RouteTransitionSignal />
         <LenisProvider>
           <div className="relative z-10">{children}</div>
         </LenisProvider>

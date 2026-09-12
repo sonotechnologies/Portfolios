@@ -171,3 +171,40 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
+
+/* ---------------------------------------------------------------------
+   Page transitions — brief: "a GSAP overlay: blueprint sheet wipes
+   across, route commits behind it, next page draws in." The native View
+   Transitions API (wired in src/lib/view-transition.ts) does the same job
+   with less risk of fighting Next's own DOM updates: the new page reveals
+   left-to-right instead of the browser's default crossfade. The work-card
+   Flip morph rides the same mechanism via matching view-transition-name
+   on the plate elements, which the browser interpolates automatically —
+   no manual GSAP Flip measuring required.
+   ------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: none;
+  }
+  ::view-transition-new(root) {
+    animation: sheet-reveal 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+}
+
+@keyframes sheet-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Reduced motion: no wipe, no morph — the route just changes. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

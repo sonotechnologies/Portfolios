@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { getProject, projects } from "@/content/projects";
 import { MonoLabel } from "@/components/ui/mono-label";
 import { SpecRow } from "@/components/ui/spec-row";
@@ -9,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/sections/header";
 import { ContactFooter } from "@/components/sections/contact-footer";
 import { MeridianPlate, OdaraPlate, RelayPlate } from "@/components/sections/project-plates";
+import { ViewTransitionLink } from "@/components/motion/view-transition-link";
+import { plateTransitionStyle } from "@/lib/view-transition-names";
 
 const plates = { meridian: MeridianPlate, relay: RelayPlate, odara: OdaraPlate };
 
@@ -74,7 +75,10 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
             </div>
           </div>
 
-          <div className="relative mt-14 h-[280px] w-full border border-edge md:h-[560px]">
+          <div
+            className="relative mt-14 h-[280px] w-full border border-edge md:h-[560px]"
+            style={plateTransitionStyle(project.slug)}
+          >
             <Plate />
           </div>
         </section>
@@ -177,8 +181,9 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
         {/* NEXT PROJECT */}
         <section className="border-t border-edge px-5 py-16 md:px-20 md:py-24">
           <MonoLabel className="mb-6 block text-annotation">NEXT</MonoLabel>
-          <Link
+          <ViewTransitionLink
             href={`/work/${nextProject.slug}`}
+            style={plateTransitionStyle(nextProject.slug)}
             className="group relative flex h-[260px] flex-col justify-end overflow-hidden border border-edge p-8 md:h-[420px]"
           >
             <div className="absolute inset-0">
@@ -189,7 +194,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
                 {nextProject.name}
               </span>
             </div>
-          </Link>
+          </ViewTransitionLink>
           <div className="mt-10">
             <Button href="#contact" variant="ghost">
               TALK TO ME ABOUT A PROJECT LIKE THIS

@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useMotionTier } from "@/lib/motion-tier";
 
 type Mode = "default" | "hover" | "view" | "text";
+
+function modeForElement(el: Element | null): Mode {
+  if (el?.closest('[data-cursor="view"]')) return "view";
+  if (el?.closest("input, textarea")) return "text";
+  if (el?.closest('a, button, [data-cursor="hover"]')) return "hover";
+  return "default";
+}
 
 /**
  * Desktop pointer-fine only (`full` tier). Crosshair with a live coordinate
@@ -14,7 +22,9 @@ type Mode = "default" | "hover" | "view" | "text";
  */
 export function CustomCursor() {
   const tier = useMotionTier();
+  const pathname = usePathname();
   const dotRef = useRef<HTMLDivElement | null>(null);
+  const targetRef = useRef({ x: 0, y: 0 });
   const [mode, setMode] = useState<Mode>("default");
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
@@ -24,7 +34,9 @@ export function CustomCursor() {
 
     document.documentElement.classList.add("custom-cursor-active");
 
-    const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const target = targetRef.current;
+    target.x = window.innerWidth / 2;
+    target.y = window.innerHeight / 2;
     const pos = { ...target };
 
     const onMove = (e: PointerEvent) => {
@@ -32,12 +44,7 @@ export function CustomCursor() {
       target.y = e.clientY;
       setVisible(true);
       setCoords({ x: Math.round(e.clientX), y: Math.round(e.clientY) });
-
-      const el = e.target as HTMLElement | null;
-      if (el?.closest('[data-cursor="view"]')) setMode("view");
-      else if (el?.closest("input, textarea")) setMode("text");
-      else if (el?.closest('a, button, [data-cursor="hover"]')) setMode("hover");
-      else setMode("default");
+      setMode(modeForElement(e.target as Element | null));
     };
     const onLeave = () => setVisible(false);
 
@@ -62,6 +69,17 @@ export function CustomCursor() {
       cancelAnimationFrame(raf);
     };
   }, [tier]);
+
+  // The pointer often doesn't move across a route change (a click that
+  // navigates, or a View-Transition morph) — without this, the cursor can
+  // get stuck in "view" mode over content that isn't a link on the new
+  // page. Re-check what's actually under it once the new page has mounted.
+  useEffect(() => {
+    if (tier !== "full") return;
+    const { x, y } = targetRef.current;
+    const el = document.elementFromPoint(x, y);
+    setMode(modeForElement(el));
+  }, [tier, pathname]);
 
   if (tier !== "full") return null;
 

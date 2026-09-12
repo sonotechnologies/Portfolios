@@ -1,8 +1,9 @@
-import Link from "next/link";
 import { SectionHeader } from "@/components/ui/section-header";
 import { SpecRow } from "@/components/ui/spec-row";
 import { Tag } from "@/components/ui/tag";
 import { Reveal } from "@/components/motion/reveal";
+import { ViewTransitionLink } from "@/components/motion/view-transition-link";
+import { plateTransitionStyle } from "@/lib/view-transition-names";
 import { projects } from "@/content/projects";
 import { MeridianPlate, OdaraPlate, RelayPlate } from "./project-plates";
 
@@ -29,9 +30,10 @@ export function Work() {
                 reversed ? "lg:flex-row-reverse" : ""
               }`}
             >
-              <Link
+              <ViewTransitionLink
                 href={`/work/${project.slug}`}
                 data-cursor="view"
+                style={plateTransitionStyle(project.slug)}
                 className="group relative block h-[280px] w-full shrink-0 overflow-hidden border border-edge md:h-[420px] lg:w-[58%]"
               >
                 <div className="h-full w-full transition-transform duration-300 ease-out group-hover:scale-[1.012]">
@@ -42,17 +44,17 @@ export function Work() {
                   aria-hidden
                   className="pointer-events-none absolute inset-0 border-2 border-hazard opacity-0 transition-[clip-path,opacity] duration-300 ease-out [clip-path:inset(0_100%_0_0)] group-hover:opacity-100 group-hover:[clip-path:inset(0_0_0_0)]"
                 />
-              </Link>
+              </ViewTransitionLink>
               <div className="flex-1 lg:pt-12">
                 <div className="mb-6 font-display text-[96px] font-semibold leading-[0.8] tracking-tight text-edge md:text-[140px]">
                   {project.number}
                 </div>
-                <Link
+                <ViewTransitionLink
                   href={`/work/${project.slug}`}
                   className="font-display text-32 font-medium tracking-tight text-paper hover:text-hazard md:text-48"
                 >
                   {project.name}
-                </Link>
+                </ViewTransitionLink>
                 <div className="mono-label mt-3.5 text-11 text-hazard">
                   CONCEPT BUILD · {project.year}
                 </div>

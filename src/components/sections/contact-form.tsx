@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { cn } from "@/lib/utils";
+import { submitContactForm, type ContactFormState } from "@/lib/actions/contact";
 
-/**
- * UI only for now — no server action wired yet. Build order (brief 2) puts
- * the real Resend server action, honeypot + rate limit, and error states in
- * step 6, after the case study route and R3F hero. This gives an honest
- * success state locally so the layout is reviewable end to end.
- */
+const initialState: ContactFormState = { status: "idle" };
+
+function FieldError({ messages }: { messages?: string[] }) {
+  if (!messages?.length) return null;
+  return <span className="mono-label text-10 text-hazard">{messages[0]}</span>;
+}
+
 export function ContactForm({
   brokenOptions,
   budgetRanges,
@@ -17,10 +19,22 @@ export function ContactForm({
   budgetRanges: (string | null)[];
 }) {
   const [broken, setBroken] = useState(brokenOptions[0]);
-  const [budget, setBudget] = useState<number | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [budgetIndex, setBudgetIndex] = useState<number | null>(null);
+  const [name, setName] = useState("");
+  const [business, setBusiness] = useState("");
+  const [timeline, setTimeline] = useState("");
+  const [message, setMessage] = useState("");
+  const [state, formAction, isPending] = useActionState(submitContactForm, initialState);
 
-  if (submitted) {
+  // React resets every uncontrolled field of a <form action={...}> once the
+  // action settles — success or error. Left uncontrolled, a visitor who
+  // fills the whole form but misses one required chip would see their
+  // error... and an empty form. Controlling every text field from state we
+  // own (state the action never touches) keeps typed values intact.
+
+  const budgetValue = budgetIndex !== null ? (budgetRanges[budgetIndex] ?? "₦[—]") : "";
+
+  if (state.status === "success") {
     return (
       <div className="flex flex-col items-center justify-center gap-4 border border-hazard p-16 text-center">
         <span className="flex h-[52px] w-[52px] items-center justify-center rounded-full border-2 border-hazard font-mono text-24 text-hazard">
@@ -35,26 +49,29 @@ export function ContactForm({
   }
 
   return (
-    <form
-      className="flex flex-col gap-8 border border-edge p-8 md:p-10"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSubmitted(true);
-      }}
-    >
+    <form action={formAction} className="flex flex-col gap-8 border border-edge p-8 md:p-10">
       <div className="mono-label flex justify-between text-10 text-annotation">
         <span>ENQUIRY — 5 FIELDS</span>
         <span>2 MIN</span>
       </div>
+
+      {state.status === "error" && state.message && (
+        <div className="mono-label border border-hazard-dim px-4 py-3 text-11 text-hazard">
+          ▲ {state.message}
+        </div>
+      )}
 
       <label className="flex flex-col gap-2">
         <span className="mono-label text-10 text-annotation">YOUR NAME</span>
         <input
           required
           name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           className="border-b border-edge bg-transparent py-3 font-sans text-16 text-paper outline-none placeholder:text-annotation focus:border-hazard"
           placeholder="Type here"
         />
+        <FieldError messages={state.fieldErrors?.name} />
       </label>
 
       <label className="flex flex-col gap-2">
@@ -62,9 +79,12 @@ export function ContactForm({
         <input
           required
           name="business"
+          value={business}
+          onChange={(e) => setBusiness(e.target.value)}
           className="border-b border-edge bg-transparent py-3 font-sans text-16 text-paper outline-none placeholder:text-annotation focus:border-hazard"
           placeholder="e.g. Ọdàrà Salon — silk press, braids"
         />
+        <FieldError messages={state.fieldErrors?.business} />
       </label>
 
       <fieldset className="flex flex-col gap-3">
@@ -86,6 +106,7 @@ export function ContactForm({
             </button>
           ))}
         </div>
+        <input type="hidden" name="broken" value={broken} />
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">
@@ -95,10 +116,10 @@ export function ContactForm({
             <button
               key={i}
               type="button"
-              onClick={() => setBudget(i)}
+              onClick={() => setBudgetIndex(i)}
               className={cn(
                 "mono-label flex-1 border px-2 py-2.5 text-center text-11",
-                budget === i ? "border-hazard text-hazard" : "border-edge text-annotation",
+                budgetIndex === i ? "border-hazard text-hazard" : "border-edge text-annotation",
               )}
             >
               {range ?? "₦[—]"}
@@ -108,12 +129,16 @@ export function ContactForm({
         <span className="mono-label text-10 text-annotation">
           RANGES MIRROR THE THREE TIERS — BLOCKED ON YOUR PRICES
         </span>
+        <input type="hidden" name="budget" value={budgetValue} />
+        <FieldError messages={state.fieldErrors?.budget} />
       </fieldset>
 
       <label className="flex flex-col gap-2">
         <span className="mono-label text-10 text-annotation">WHEN DO YOU NEED IT?</span>
         <input
           name="timeline"
+          value={timeline}
+          onChange={(e) => setTimeline(e.target.value)}
           className="border-b border-edge bg-transparent py-3 font-sans text-16 text-paper outline-none placeholder:text-annotation focus:border-hazard"
           placeholder="Type here"
         />
@@ -122,21 +147,26 @@ export function ContactForm({
       <label className="flex flex-col gap-2">
         <span className="mono-label text-10 text-annotation">MESSAGE</span>
         <textarea
+          required
           name="message"
           rows={3}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           className="resize-none border-b border-edge bg-transparent py-3 font-sans text-16 text-paper outline-none placeholder:text-annotation focus:border-hazard"
           placeholder="Type here"
         />
+        <FieldError messages={state.fieldErrors?.message} />
       </label>
 
-      {/* honeypot — real spam/rate-limit handling lands with the server action in build step 6 */}
+      {/* honeypot — real visitors never fill this in */}
       <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
 
       <button
         type="submit"
-        className="mono-label bg-hazard py-[18px] text-center text-[13px] font-medium text-ink hover:bg-paper"
+        disabled={isPending}
+        className="mono-label bg-hazard py-[18px] text-center text-[13px] font-medium text-ink transition-colors hover:bg-paper disabled:opacity-60"
       >
-        SEND IT
+        {isPending ? "SENDING…" : "SEND IT"}
       </button>
       <span className="mono-label text-center text-10 text-annotation">
         I REPLY TO EVERY ONE, EVEN THE NOS.

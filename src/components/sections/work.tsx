@@ -6,9 +6,15 @@ import { Reveal } from "@/components/motion/reveal";
 import { ViewTransitionLink } from "@/components/motion/view-transition-link";
 import { plateTransitionStyle } from "@/lib/view-transition-names";
 import { projects } from "@/content/projects";
-import { FreshEatsPlate, MeridianPlate, OdaraPlate, RelayPlate } from "./project-plates";
+import { FreshEatsPlate, MeridianPlate, NexaPlate, OdaraPlate, RelayPlate } from "./project-plates";
 
-const plates = { meridian: MeridianPlate, relay: RelayPlate, odara: OdaraPlate, fresheats: FreshEatsPlate };
+const plates = {
+  meridian: MeridianPlate,
+  relay: RelayPlate,
+  odara: OdaraPlate,
+  fresheats: FreshEatsPlate,
+  nexa: NexaPlate,
+};
 const FEATURED_COUNT = 3;
 
 export function Work() {

@@ -7,11 +7,17 @@ import { Tag } from "@/components/ui/tag";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/sections/header";
 import { ContactFooter } from "@/components/sections/contact-footer";
-import { FreshEatsPlate, MeridianPlate, OdaraPlate, RelayPlate } from "@/components/sections/project-plates";
+import { FreshEatsPlate, MeridianPlate, NexaPlate, OdaraPlate, RelayPlate } from "@/components/sections/project-plates";
 import { ViewTransitionLink } from "@/components/motion/view-transition-link";
 import { plateTransitionStyle } from "@/lib/view-transition-names";
 
-const plates = { meridian: MeridianPlate, relay: RelayPlate, odara: OdaraPlate, fresheats: FreshEatsPlate };
+const plates = {
+  meridian: MeridianPlate,
+  relay: RelayPlate,
+  odara: OdaraPlate,
+  fresheats: FreshEatsPlate,
+  nexa: NexaPlate,
+};
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));

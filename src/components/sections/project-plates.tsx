@@ -175,6 +175,63 @@ export function FreshEatsPlate() {
   );
 }
 
+export function NexaPlate() {
+  return (
+    <div className="flex h-full w-full bg-surface">
+      <div className="flex flex-1 flex-col gap-4 border-r border-edge p-5">
+        <div className="flex items-center justify-between">
+          <span className="font-display text-17 font-semibold text-paper">Nexa</span>
+          <span className="mono-label text-9 text-annotation">DRAG TO SPIN</span>
+        </div>
+        <div
+          className="relative flex-1"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(45deg, var(--color-blueprint) 0 6px, var(--color-surface) 6px 12px)",
+          }}
+        >
+          <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
+            {[0, 1, 2, 3].map((i) => (
+              <span
+                key={i}
+                className={`h-1.5 w-1.5 rounded-full ${i === 1 ? "bg-hazard" : "bg-annotation/40"}`}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-2.5">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className={`h-6 w-6 rounded-full border ${i === 0 ? "border-hazard" : "border-edge"}`}
+              style={{ backgroundColor: i === 0 ? "var(--color-annotation)" : "var(--color-edge)" }}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="hidden w-[42%] flex-col gap-3.5 p-5 sm:flex">
+        <span className="mono-label text-9 text-annotation">NEXA PRO 14</span>
+        <span className="font-display text-24 font-semibold text-paper">₦1,284,000</span>
+        <div className="mono-label flex flex-wrap gap-2 text-9">
+          {["128GB", "256GB", "512GB"].map((s) => (
+            <span
+              key={s}
+              className={`px-2.5 py-1.5 ${
+                s === "256GB" ? "bg-hazard text-ink" : "border border-edge text-annotation"
+              }`}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+        <div className="mono-label mt-auto bg-hazard py-3 text-center text-11 font-medium text-ink">
+          ADD TO BAG
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function OdaraPlate() {
   return (
     <div className="flex h-full w-full bg-surface">

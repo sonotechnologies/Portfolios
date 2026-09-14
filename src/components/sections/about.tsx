@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { MonoLabel } from "@/components/ui/mono-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { Reveal } from "@/components/motion/reveal";
@@ -14,19 +15,32 @@ export function About() {
       <div className="grid gap-14 lg:grid-cols-[480px_1fr] lg:items-start lg:gap-20">
         <div>
           <div className="relative h-[320px] overflow-hidden border border-edge bg-surface md:h-[600px]">
-            <div
-              className="absolute inset-0 opacity-90"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(22deg, var(--color-blueprint) 0 5px, var(--color-surface) 5px 11px)",
-              }}
-            />
-            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 bg-gradient-to-t from-ink/95 to-transparent p-5">
-              <span className="mono-label text-10 text-hazard">▲ PLACEHOLDER — DROP A PHOTO HERE</span>
-              <span className="mono-label text-10 leading-relaxed text-paper">
-                PORTRAIT · 480 × 600 · DUOTONE INK/PAPER
-              </span>
-            </div>
+            {aboutCopy.portraitSrc ? (
+              <Image
+                src={aboutCopy.portraitSrc}
+                alt="Moshood Ibrahim Bolaji"
+                fill
+                sizes="(min-width: 1024px) 480px, 100vw"
+                className="object-cover"
+                priority
+              />
+            ) : (
+              <>
+                <div
+                  className="absolute inset-0 opacity-90"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(22deg, var(--color-blueprint) 0 5px, var(--color-surface) 5px 11px)",
+                  }}
+                />
+                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 bg-gradient-to-t from-ink/95 to-transparent p-5">
+                  <span className="mono-label text-10 text-hazard">▲ PLACEHOLDER — DROP A PHOTO HERE</span>
+                  <span className="mono-label text-10 leading-relaxed text-paper">
+                    PORTRAIT · 480 × 600 · DUOTONE INK/PAPER
+                  </span>
+                </div>
+              </>
+            )}
           </div>
           <div className="mono-label mt-4 flex justify-between text-10 text-annotation">
             <span>FIG. 05 — THE BUILDER</span>

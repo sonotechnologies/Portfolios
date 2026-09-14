@@ -1,6 +1,7 @@
 import { SectionHeader } from "@/components/ui/section-header";
 import { SpecRow } from "@/components/ui/spec-row";
 import { Tag } from "@/components/ui/tag";
+import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 import { ViewTransitionLink } from "@/components/motion/view-transition-link";
 import { plateTransitionStyle } from "@/lib/view-transition-names";
@@ -8,8 +9,12 @@ import { projects } from "@/content/projects";
 import { MeridianPlate, OdaraPlate, RelayPlate } from "./project-plates";
 
 const plates = { meridian: MeridianPlate, relay: RelayPlate, odara: OdaraPlate };
+const FEATURED_COUNT = 3;
 
 export function Work() {
+  const featured = projects.slice(0, FEATURED_COUNT);
+  const hasMore = projects.length > FEATURED_COUNT;
+
   return (
     <section id="work" data-section className="px-5 py-20 md:px-20 md:py-40">
       <SectionHeader
@@ -19,7 +24,7 @@ export function Work() {
       />
 
       <div className="flex flex-col gap-24 md:gap-40">
-        {projects.map((project, index) => {
+        {featured.map((project, index) => {
           const Plate = plates[project.slug as keyof typeof plates];
           const reversed = index === 1;
           return (
@@ -88,6 +93,14 @@ export function Work() {
           );
         })}
       </div>
+
+      {hasMore ? (
+        <div className="mt-16 flex justify-center md:mt-24">
+          <ButtonLink href="/work" variant="ghost">
+            SEE MORE WORK
+          </ButtonLink>
+        </div>
+      ) : null}
     </section>
   );
 }

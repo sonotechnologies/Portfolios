@@ -121,7 +121,7 @@ export const projects: Project[] = [
       "Mobile-first food delivery marketplace with live order tracking. Browse restaurants, build an order, and watch it move from kitchen to door — built entirely as a front-end exercise, no backend, running on mock data.",
     role: "Direction + AI-assisted build",
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "Framer Motion", "next/og"],
-    liveUrl: null,
+    liveUrl: "https://fresh-eats-swart.vercel.app",
     screenCount: 10,
     caseStudy: {
       headline: "The browser\nwas the backend",
@@ -182,7 +182,7 @@ export const projects: Project[] = [
       "A front-end e-commerce demo for a premium electronics store — phones, laptops, headsets, power banks. Browse, a product page with a drag-to-scrub gallery, sign-in-gated cart, and checkout through to confirmation — built as a reusable base to reskin per client.",
     role: "Design direction + AI-assisted build",
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "Zustand", "next/og"],
-    liveUrl: null,
+    liveUrl: "https://nexa-store-zeta.vercel.app",
     screenCount: 9,
     caseStudy: {
       headline: "Anodized violet,\nnot a palette",

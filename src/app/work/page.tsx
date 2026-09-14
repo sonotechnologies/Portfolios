@@ -6,12 +6,13 @@ import { Header } from "@/components/sections/header";
 import { ContactFooter } from "@/components/sections/contact-footer";
 import { ViewTransitionLink } from "@/components/motion/view-transition-link";
 import { plateTransitionStyle } from "@/lib/view-transition-names";
-import { MeridianPlate, OdaraPlate, RelayPlate } from "@/components/sections/project-plates";
+import { FreshEatsPlate, MeridianPlate, OdaraPlate, RelayPlate } from "@/components/sections/project-plates";
 
 const plates: Record<string, React.ComponentType> = {
   meridian: MeridianPlate,
   relay: RelayPlate,
   odara: OdaraPlate,
+  fresheats: FreshEatsPlate,
 };
 
 export const metadata: Metadata = {

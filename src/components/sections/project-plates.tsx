@@ -103,6 +103,78 @@ export function RelayPlate() {
   );
 }
 
+export function FreshEatsPlate() {
+  const steps = ["CONFIRMED", "PREPARING", "OUT FOR DELIVERY", "DELIVERED"];
+  const activeStep = 2;
+  return (
+    <div className="flex h-full w-full bg-surface">
+      <div className="flex flex-1 flex-col gap-4 border-r border-edge p-5">
+        <div className="flex items-center justify-between">
+          <span className="font-display text-17 font-semibold text-paper">FreshEats</span>
+          <span className="h-6 w-20 rounded-full border border-edge" />
+        </div>
+        <div className="flex gap-2">
+          {["ALL", "RICE", "GRILL", "SOUP"].map((c, i) => (
+            <span
+              key={c}
+              className={`mono-label px-2.5 py-1 text-9 ${
+                i === 1 ? "bg-hazard text-ink" : "border border-edge text-annotation"
+              }`}
+            >
+              {c}
+            </span>
+          ))}
+        </div>
+        <div className="grid flex-1 grid-cols-2 content-start gap-3">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="flex flex-col gap-2 border border-edge p-2">
+              <div
+                className="h-12"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(45deg, var(--color-blueprint) 0 6px, var(--color-surface) 6px 12px)",
+                }}
+              />
+              <span className="h-1.5 w-3/4 rounded-full bg-edge" />
+            </div>
+          ))}
+        </div>
+        <div className="mono-label flex items-center justify-between bg-hazard px-3 py-2.5 text-10 font-medium text-ink">
+          <span>VIEW CART · 3 ITEMS</span>
+          <span>₦6,200</span>
+        </div>
+      </div>
+      <div className="hidden w-[42%] flex-col gap-4 p-5 sm:flex">
+        <span className="mono-label text-9 text-annotation">YOUR ORDER — ETA 14 MIN</span>
+        <div className="flex flex-col gap-2.5">
+          {steps.map((step, i) => (
+            <div key={step} className="flex items-center gap-2.5">
+              <span
+                className={`h-2 w-2 shrink-0 rounded-full ${
+                  i <= activeStep ? "bg-hazard" : "border border-edge"
+                }`}
+              />
+              <span
+                className={`mono-label text-9 ${
+                  i === activeStep ? "text-hazard" : i < activeStep ? "text-annotation line-through" : "text-annotation"
+                }`}
+              >
+                {step}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="relative mt-auto h-16 border-t border-edge pt-4">
+          <span className="absolute left-0 top-1/2 h-px w-full bg-edge" />
+          <span className="absolute left-[15%] top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-annotation" />
+          <span className="absolute left-[60%] top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-hazard shadow-[0_0_0_6px_rgba(255,91,4,0.18)]" />
+          <span className="absolute left-[92%] top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-annotation" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function OdaraPlate() {
   return (
     <div className="flex h-full w-full bg-surface">

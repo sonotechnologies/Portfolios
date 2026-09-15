@@ -28,6 +28,8 @@ export type Project = {
   liveUrl: string | null;
   screenCount: number | null;
   caseStudy: CaseStudy | null;
+  /** CONCEPT: a sketch/demo with no real backend. LIVE: a real, functioning, deployed build. */
+  status: "CONCEPT" | "LIVE";
 };
 
 export const projects: Project[] = [
@@ -44,20 +46,77 @@ export const projects: Project[] = [
     liveUrl: null,
     screenCount: null,
     caseStudy: null,
+    status: "CONCEPT",
   },
   {
     slug: "relay",
     number: "02",
     name: "Relay",
     year: 2026,
-    oneLiner: "Dispatch board for a small logistics outfit.",
+    oneLiner: "Live dispatch board for courier businesses to track riders and jobs in real time.",
     description:
-      "Dispatch board for a small logistics outfit. One screen shows every rider, every open job, and which deliveries are late — the thing that normally lives in six WhatsApp groups.",
-    role: "Design + Build",
-    stack: null,
-    liveUrl: null,
-    screenCount: null,
-    caseStudy: null,
+      "A multi-tenant dispatch board for small courier and logistics outfits. Dispatchers see every rider and job on one live board, assign and reassign work, message riders per job, and watch jobs move through their lifecycle on their own — the board stays active even without manual input.",
+    role: "Direction + AI-assisted full-stack build",
+    stack: [
+      "Next.js 16",
+      "PostgreSQL (Neon)",
+      "Prisma",
+      "NextAuth v5",
+      "TypeScript",
+      "Tailwind CSS v4",
+      "SWR",
+    ],
+    liveUrl: "https://relay-gamma-three.vercel.app",
+    screenCount: 5,
+    caseStudy: {
+      headline: "The poll\nwas the worker",
+      type: "DISPATCH",
+      problem:
+        "Built to Moshood's own brief, not independent research: small courier and logistics outfits need a live view of who's carrying what and whether anything's running late, without adopting enterprise fleet-management software built for much bigger operations. I built to that brief — I didn't independently validate it against real dispatchers, so this solves the problem as specified, not as researched.",
+      decision:
+        "Vercel's serverless functions don't support a persistent background worker, so the board couldn't just run a simulation loop to feel \"live.\" Instead, the simulation tick is triggered inline by the same /api/board request that loads the data, guarded by an atomic lastTickAt claim so concurrent polls from multiple open tabs can't double-advance it. A daily cron hit is only a backstop for when nobody has the board open — the poll itself is the real driver. That one constraint shaped the whole backend: no queue, no separate worker, no WebSocket server.",
+      flow: [
+        {
+          step: "1 / 4",
+          label: "CREATE A DEPOT",
+          progressPct: 25,
+          note: {
+            title: "01 — SIGN UP",
+            body: "Business name, name, email, password. The tenant is seeded immediately with 8–12 riders and 14–19 jobs in mixed states, so the board opens active instead of empty.",
+          },
+        },
+        {
+          step: "2 / 4",
+          label: "WATCH THE BOARD",
+          progressPct: 50,
+          note: {
+            title: "02 — BOARD",
+            body: "One dense screen — live stats, a filterable departures table, the rider roster — all auto-refreshing every ~4s. A dispatcher never has to navigate to see the whole operation.",
+          },
+        },
+        {
+          step: "3 / 4",
+          label: "DISPATCH",
+          progressPct: 75,
+          note: {
+            title: "03 — DISPATCH",
+            body: "Click a job to assign or reassign a rider, advance its status, or flag it late. This is where manual action overrides the autonomous simulation.",
+          },
+        },
+        {
+          step: "4 / 4",
+          label: "CHECK IN",
+          progressPct: 100,
+          note: {
+            title: "04 — CHECK IN",
+            body: "Rider Day lays one rider's jobs out on an hourly timeline; Messages is a per-rider, per-depot thread — both a narrower view than the board.",
+          },
+        },
+      ],
+      whatIdDoDifferently:
+        "The simulation tick and tenant-seeding logic were both written as naive sequential per-row database writes first, and had to be rewritten for batching after hitting an 11.8-second board load and a 47-second signup against real network latency to Postgres — I'd design for bulk writes from the start next time. Mobile got a horizontal-scroll patch rather than a real responsive layout, which is fine for a desk-bound dispatcher tool but a real gap if anyone checks the board from a phone. And I didn't check Vercel's Hobby-plan Cron limits until the deploy actually failed on them — worth confirming hosting-tier constraints before finalizing infra config, not after.",
+    },
+    status: "LIVE",
   },
   {
     slug: "odara",
@@ -110,6 +169,7 @@ export const projects: Project[] = [
       whatIdDoDifferently:
         "The three-step flow is one step too many. A returning customer already knows the service and the stylist — they should land on a single screen with the slot picked and the deposit ready. I'd build that path first next time and keep the three-step version for first-timers only.",
     },
+    status: "CONCEPT",
   },
   {
     slug: "fresheats",
@@ -171,6 +231,7 @@ export const projects: Project[] = [
       whatIdDoDifferently:
         "Real auth from the start — the localStorage shim stores passwords in plain text and doesn't survive a device switch, so it needs replacing, not upgrading. I'd self-host the food photography instead of hotlinking it, and branch from commit one instead of pushing straight to main and catching up later. Verification was a Playwright script I ran by hand each time — it caught real bugs, but it isn't a suite anyone else can run against a future change.",
     },
+    status: "CONCEPT",
   },
   {
     slug: "nexa",
@@ -232,6 +293,7 @@ export const projects: Project[] = [
       whatIdDoDifferently:
         "Product imagery is still a diagonal-stripe placeholder — every stock photo host I tried (Unsplash, Pexels, Pixabay, Wikimedia) was blocked by the build environment's network policy, so next time I'd get real photography into the repo from day one instead of working around it twice. Auth is client-side only, so a signed-out user with leftover cart items from before they signed out can still reach checkout — a gap I flagged but didn't close, since it was outside what was asked. And a few micro-interactions (the filter sheet, add-to-cart) are functional but not fully polished — I'd tighten those if this became more than a demo.",
     },
+    status: "CONCEPT",
   },
 ];
 

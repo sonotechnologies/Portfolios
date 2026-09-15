@@ -67,7 +67,7 @@ export function Work() {
                   {project.name}
                 </ViewTransitionLink>
                 <div className="mono-label mt-3.5 text-11 text-hazard">
-                  CONCEPT BUILD · {project.year}
+                  {project.status} BUILD · {project.year}
                 </div>
                 <p className="mt-6 max-w-[420px] font-sans text-16 leading-relaxed text-annotation md:text-18">
                   {project.description}

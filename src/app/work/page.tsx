@@ -67,7 +67,9 @@ export default function WorkIndexPage() {
                       <span className="font-display text-24 font-medium tracking-tight text-paper group-hover:text-hazard">
                         {project.name}
                       </span>
-                      <span className="mono-label text-10 text-hazard">CONCEPT · {project.year}</span>
+                      <span className="mono-label text-10 text-hazard">
+                        {project.status} · {project.year}
+                      </span>
                     </div>
                     <p className="font-sans text-14 leading-relaxed text-annotation">
                       {project.oneLiner}

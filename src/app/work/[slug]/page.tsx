@@ -53,7 +53,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
           <div className="flex flex-col justify-between gap-10 border-t border-edge pt-6 md:flex-row md:items-end">
             <div>
               <MonoLabel className="mb-4 block text-hazard">
-                {project.number} / CASE STUDY — {project.name.toUpperCase()} · CONCEPT BUILD
+                {project.number} / CASE STUDY — {project.name.toUpperCase()} · {project.status} BUILD
               </MonoLabel>
               <h1 className="font-display text-48 font-semibold leading-[0.9] tracking-tight text-paper md:text-96">
                 {project.name}
